@@ -1,0 +1,14 @@
+---
+
+# NOTE: etcd doesn't seem to release shas of releases
+etcd_binary_url: "https://github.com/coreos/etcd/releases/download/v3.0.10/etcd-v3.0.10-linux-amd64.tar.gz"
+
+etcd_config_dir: "/etc/etcd"
+etcd_lib_dir: "/var/lib/etcd"
+
+# For storing downloads
+etcd_release_cache_dir: "/var/cache/etcd-release"
+
+etcd_directories:
+  - "{{ etcd_config_dir }}"
+  - "{{ etcd_lib_dir }}"

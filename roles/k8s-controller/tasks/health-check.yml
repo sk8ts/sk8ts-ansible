@@ -1,0 +1,5 @@
+---
+
+- name: check cluster health
+  shell: kubectl get componentstatuses | grep Healthy
+  changed_when: False

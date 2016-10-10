@@ -1,0 +1,8 @@
+---
+
+- include: facts-vpc.yml
+- include: vpc.yml
+- include: facts-subnets.yml
+- include: security-groups.yml
+- include: nat-gateway.yml
+- include: route-table.yml

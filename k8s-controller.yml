@@ -1,0 +1,5 @@
+---
+
+- hosts: tag_krole_controller
+  roles:
+    - k8s-controller

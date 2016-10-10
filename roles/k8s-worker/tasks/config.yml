@@ -1,0 +1,7 @@
+---
+
+- name: install /var/lib/kubelet/kubeconfig from template
+  template:
+    src: "kubeconfig"
+    dest: "/var/lib/kubelet/kubeconfig"
+  notify: restart k8s worker services

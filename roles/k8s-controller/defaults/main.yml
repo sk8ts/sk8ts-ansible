@@ -1,0 +1,12 @@
+---
+
+k8s_release_cache_dir: "/var/cache/k8s-release"
+
+k8s_controller_binaries:
+  - kube-apiserver
+  - kube-scheduler
+  - kube-controller-manager
+
+k8s_controller_config_files:
+  - token.csv
+  - authorization-policy.jsonl

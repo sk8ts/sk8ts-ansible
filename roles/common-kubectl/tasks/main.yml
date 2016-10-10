@@ -1,0 +1,8 @@
+---
+
+- name: install kubectl binary from cache
+  copy:
+    src: "{{ k8s_release_cache_dir }}/kubernetes/server/bin/kubectl"
+    dest: "/usr/bin/"
+    mode: "0755"
+

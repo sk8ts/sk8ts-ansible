@@ -1,0 +1,68 @@
+---
+
+k8s_cluster_name: "kluster1"
+
+aws_region: "{{ lookup('aws_region') }}"
+# Pick the "c" availability zone by default
+availability_zone: "{{ aws_region }}c"
+
+# 
+# Subnets
+# 
+
+vpc_public_subnet_name: "k8s-public"
+vpc_public_subnet_cidr: "172.20.0.0/24"
+vpc_private_subnet_name: "k8s-private"
+vpc_private_subnet_cidr: "172.20.1.0/24"
+
+#
+# VPC
+#
+
+vpc_network_name: "kubernetes"
+vpc_network_cidr: "172.20.0.0/16"
+vpc_security_group_name: "allow_k8s"
+
+#
+# k8s binary cache
+#
+
+k8s_release_cache_dir: "/var/cache/k8s-release"
+
+#
+# Docker binary cache
+#
+docker_release_cache_dir: "/var/cache/docker-release"
+
+
+
+#
+# Override instances
+#
+use_spots: True
+
+X_k8s_instances:
+  -
+    index: 0
+    krole: "util"
+    public_ip: True
+    source_dest_check: True
+    iam_role: "{{ iam_master_role }}"
+  -
+    index: 0
+    krole: "etcd"
+    public_ip: False
+    source_dest_check: True
+    iam_role: "{{ iam_worker_role }}"
+  -
+    index: 1
+    krole: "etcd"
+    public_ip: False
+    source_dest_check: True
+    iam_role: "{{ iam_worker_role }}"
+  -
+    index: 2
+    krole: "etcd"
+    public_ip: False
+    source_dest_check: True
+    iam_role: "{{ iam_worker_role }}"

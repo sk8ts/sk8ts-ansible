@@ -1,0 +1,38 @@
+---
+
+- ec2_vpc_subnet_facts:
+    region: "{{ aws_region }}"
+    filters:
+      vpc-id: "{{ vpc_network_id }}" 
+      "tag:Name": "{{ vpc_public_subnet_name }}"
+  register: vpc_public_subnet_facts
+
+- debug:
+    var: vpc_public_subnet_facts
+    verbosity: 2
+
+- ec2_vpc_subnet_facts:
+    region: "{{ aws_region }}"
+    filters:
+      vpc-id: "{{ vpc_network_id }}" 
+      "tag:Name": "{{ vpc_private_subnet_name }}"
+  register: vpc_private_subnet_facts
+
+- debug:
+    var: vpc_private_subnet_facts
+    verbosity: 2
+
+- debug:
+    var: vpc_public_subnet_facts.subnets[0].id
+    verbosity: 2
+
+- debug:
+    var: vpc_private_subnet_facts.subnets[0].id
+    verbosity: 2
+
+- set_fact:
+    vpc_private_subnet_id: "{{ vpc_private_subnet_facts.subnets[0].id }}"
+
+- set_fact:
+    vpc_public_subnet_id: "{{ vpc_public_subnet_facts.subnets[0].id }}"
+

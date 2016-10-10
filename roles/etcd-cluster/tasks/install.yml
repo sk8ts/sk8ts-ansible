@@ -1,0 +1,21 @@
+---
+
+- name: ensure required etcd directories exist
+  file:
+    state: "directory"
+    path: "{{ item }}"
+  with_items: "{{ etcd_directories }}"
+
+- name: copy etcd binaries from cache
+  copy:
+    src: "{{ item }}"
+    dest: "/usr/bin/{{ item | basename }}"
+    mode: "0755"
+  with_fileglob:
+    - "{{ etcd_release_cache_dir }}/etcd*/etcd*"
+
+- name: install etcd.service configuration file
+  template:
+    src: "etc/systemd/system/etcd.service"
+    dest: "/etc/systemd/system/"
+  notify: systemctl daemon-reload

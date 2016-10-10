@@ -1,0 +1,15 @@
+---
+
+#
+# Certificate Authority
+#
+
+
+# FIXME: maybe just delegate and do once?
+# Get facts on all etcd nodes
+- hosts: tag_krole_etcd
+
+# One node will host the CA
+- hosts: tag_krole_etcd[0]
+  roles:
+    - certificate-authority

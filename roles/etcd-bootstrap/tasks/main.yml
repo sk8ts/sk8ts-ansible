@@ -1,0 +1,16 @@
+---
+
+- name: check etcd cluster status
+  shell: etcdctl --ca-file=/etc/etcd/ca.pem cluster-health 
+  changed_when: False
+  register: etcd_cluster_health
+  ignore_errors: True
+
+- debug: 
+    var: etcd_cluster_health
+
+
+# Only bootstrap if cluster is not running
+- include: bootstrap.yml
+  when: ( '"healthy" not in etcd_cluster_health.stdout' ) or
+        ( etcd_cluster_health|failed )

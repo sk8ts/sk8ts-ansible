@@ -1,0 +1,3 @@
+[local]
+localhost ansible_python_interpreter=/opt/sk8ts-venv/bin/python
+

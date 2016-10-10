@@ -1,0 +1,8 @@
+---
+
+- hosts: tag_krole_controller
+
+- hosts: tag_krole_worker
+  roles:
+    - docker
+    - k8s-worker

@@ -1,0 +1,12 @@
+---
+
+- name: ensure k8s controller services are running
+  service:
+    name: "{{ item }}"
+    state: "running"
+    enabled: True
+  with_items:
+    - kube-apiserver
+    - kube-controller-manager
+    - kube-scheduler
+

@@ -1,0 +1,6 @@
+---
+
+- include: install.yml
+- include: install-cni.yml
+- include: config.yml
+- include: services.yml

@@ -1,0 +1,23 @@
+{
+  "CN": "{{ ca_CN }}",
+  "hosts": [
+{# NOTE: it seems the names of the hosts are their ips in this case #}
+{% for host in groups['tag_krole_etcd'] %}
+    "{{ hostvars[host].ansible_default_ipv4.address }}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+  ],
+  "key": {
+    "algo": "{{ ca_key_algo }}",
+    "size": {{ ca_key_size }} 
+  },
+  "names": [
+    {
+      "C": "{{ ca_C }}",
+      "L": "{{ ca_L }}",
+      "O": "{{ ca_O }}",
+      "OU": "{{ ca_OU }}",
+      "ST": "{{ ca_ST }}"
+    }
+  ]
+}

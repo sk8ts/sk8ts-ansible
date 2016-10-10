@@ -1,0 +1,41 @@
+---
+
+- name: set ssh_keys_dir fact 
+  set_fact:
+    ssh_keys_dir: "{{ ansible_env.PWD }}/ssh-keys"
+
+- name: set ssh_key_file fact
+  set_fact:
+    ssh_key_file: "{{ ssh_keys_dir }}/id_rsa"
+
+# FIXME: perms user/group
+- name: ensure ssh-keys directory exists
+  file:
+    path: "{{ ssh_keys_dir }}" 
+    state: "directory"
+    owner: "{{ ansible_env.SUDO_USER }}"
+    group: "{{ ansible_env.SUDO_USER }}"
+
+# FIXME: become proper user?
+# Sadly aws does not support ed25519 keys. Seems rsa is the best choice?
+- name: generate defalt ssh keypair
+  shell: ssh-keygen -t rsa -b 2048 -f {{ ssh_key_file }} -q -N "" 
+  become: False
+  args:
+    creates: "{{ ssh_key_file }}"
+
+# Finally create the key name
+- name: ensure the generated public key exists in ec2
+  ec2_key:
+    name: "{{ default_ssh_key_name }}"
+    key_material: "{{ item }}"
+    region: "{{ aws_region }}"
+  with_file: "{{ ssh_key_file }}.pub"
+
+#NOTE: I experienced a weird bug with this task as anything after it would
+# be skipped.  Very weird. So I had to put it last in the playbook.
+# If ec2_key_name is not set, which is why this playbook has been loaded 
+# from main.yml, then use the default key name.
+- name: set ec2_key_name to default_ssh_key_name
+  set_fact:
+    ec2_key_name: "{{ default_ssh_key_name }}"

@@ -1,0 +1,117 @@
+---
+
+# NOTE: There are 4 tasks there, based on whether spots are being used
+# and if the instance is supposed to be in the public network, ie. get
+# a public IP, or in the private network.
+
+
+#
+# Create instances in the public subnet
+#
+
+- name: provision NORMAL kubernetes publically available virtual machines in AWS
+  ec2:
+    region: "{{ aws_region }}"
+    key_name: "{{ ec2_key_name }}"
+    instance_type: "{{ aws_instance_type }}"
+    image: "{{ image }}"
+    wait: True 
+    vpc_subnet_id: "{{ vpc_public_subnet_id }}"
+    assign_public_ip: "{{ item.public_ip }}"
+    user_data: "{{ lookup('template', 'templates/user-data-{{ item.krole }}') }}"
+    #FIXME: eventually use a minion role as well, or better limit roles/policies
+    source_dest_check: "{{ item.source_dest_check }}"
+    group: 
+      - "default"
+      - "{{ vpc_security_group_name }}"
+    instance_profile_name: "{{ item.iam_role }}"
+    instance_tags:
+      krole: "{{ item.krole }}"
+      Name: "{{ item.krole }}{{ item.index }}"
+      KubernetesCluster: "{{ k8s_cluster_name }}"
+  with_items: "{{ k8s_instances }}"
+  when: item.public_ip == True and 
+        use_spots == False and 
+        "{{ item.krole }}{{ item.index }}" not in groups['all']
+
+- name: provision SPOT INSTANCES for kubernetes publically available virtual machines in AWS
+  ec2:
+    region: "{{ aws_region }}"
+    key_name: "{{ ec2_key_name }}"
+    instance_type: "{{ aws_instance_type }}"
+    image: "{{ image }}"
+    wait: True
+    spot_price: "{{ spot_price }}"
+    spot_wait_timeout: "{{ spot_timeout }}"
+    vpc_subnet_id: "{{ vpc_public_subnet_id }}"
+    assign_public_ip: "{{ item.public_ip }}"
+    user_data: "{{ lookup('template', 'templates/user-data-{{ item.krole }}') }}"
+    #FIXME: eventually use a minion role as well, or better limit roles/policies
+    source_dest_check: "{{ item.source_dest_check }}"
+    group:
+      - "default"
+      - "{{ vpc_security_group_name }}"
+    instance_profile_name: "{{ item.iam_role }}"
+    instance_tags:
+      krole: "{{ item.krole }}"
+      Name: "{{ item.krole }}{{ item.index }}"
+      KubernetesCluster: "{{ k8s_cluster_name }}"
+  with_items: "{{ k8s_instances }}"
+  when: item.public_ip == True and 
+        use_spots == True and 
+        "{{ item.krole }}{{ item.index }}" not in groups['all']
+
+#
+# Create controller instances in the private subnet
+#
+
+- name: provision NORMAL kubernetes private virtual machines in AWS
+  ec2:
+    region: "{{ aws_region }}"
+    key_name: "{{ ec2_key_name }}"
+    instance_type: "{{ aws_instance_type }}"
+    image: "{{ image }}"
+    wait: True 
+    vpc_subnet_id: "{{ vpc_private_subnet_id }}"
+    assign_public_ip: "{{ item.public_ip }}"
+    user_data: "{{ lookup('template', 'templates/user-data-{{ item.krole }}') }}"
+    source_dest_check: "{{ item.source_dest_check }}"
+    group: 
+      - "default"
+      - "{{ vpc_security_group_name }}"
+    instance_profile_name: "{{ item.iam_role }}"
+    instance_tags:
+      krole: "{{ item.krole }}"
+      Name: "{{ item.krole }}{{ item.index }}"
+      KubernetesCluster: "{{ k8s_cluster_name }}"
+  with_items: "{{ k8s_instances }}"
+  when: item.public_ip == False and 
+        use_spots == False and 
+        "{{ item.krole }}{{ item.index }}" not in groups['all']
+
+# If spot instances is yes then create spot instances
+- name: provision SPOT INSTANCES for kubernetes private virtual machines in AWS
+  ec2:
+    region: "{{ aws_region }}"
+    key_name: "{{ ec2_key_name }}"
+    instance_type: "{{ aws_instance_type }}"
+    image: "{{ image }}"
+    wait: True 
+    spot_price: "{{ spot_price }}"
+    spot_wait_timeout: "{{ spot_timeout }}"
+    vpc_subnet_id: "{{ vpc_private_subnet_id }}"
+    assign_public_ip: "{{ item.public_ip }}"
+    user_data: "{{ lookup('template', 'templates/user-data-{{ item.krole }}') }}"
+    source_dest_check: "{{ item.source_dest_check }}"
+    group: 
+      - "default"
+      - "{{ vpc_security_group_name }}"
+    instance_profile_name: "{{ item.iam_role }}"
+    instance_tags:
+      krole: "{{ item.krole }}"
+      Name: "{{ item.krole }}{{ item.index }}"
+      KubernetesCluster: "{{ k8s_cluster_name }}"
+  with_items: "{{ k8s_instances }}"
+  when: item.public_ip == False and 
+        use_spots == True and 
+        "{{ item.krole }}{{ item.index }}" not in groups['all']

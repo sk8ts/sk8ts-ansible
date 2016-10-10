@@ -1,0 +1,31 @@
+---
+
+# NOTE: no_result_action fail? weird
+# NOTE: Essentially the name will help you find the ami. None of the
+# other parts of the search are all that valuable. Name will determine
+# the virtualization type and root device type. AFAIK.
+# NOTE: is_public seems to be broken.
+- ec2_ami_find:
+    name: "{{ ami_name }}-*"
+    region: "{{ aws_region }}"
+    owner: 099720109477
+    sort: name
+    sort_order: descending
+    sort_end: 1
+    no_result_action: fail
+  register: ami_find 
+  tags:
+    - find-ami
+
+- debug:
+    var: ami_find 
+    verbosity: 2
+  tags:
+    - find-ami
+
+- set_fact:
+    image: "{{ ami_find['results'][0]['ami_id'] }}"
+
+- debug:
+    var: image
+    verbosity: 2

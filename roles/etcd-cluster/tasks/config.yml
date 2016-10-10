@@ -1,0 +1,10 @@
+---
+
+- name: ensure certificates are installed in the etcd config dir
+  copy:
+    src: "fetched/{{ item }}"
+    dest: "{{ etcd_config_dir }}/{{ item }}"
+  with_items:
+    - ca.pem
+    - kubernetes-key.pem 
+    - kubernetes.pem

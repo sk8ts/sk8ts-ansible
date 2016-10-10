@@ -1,0 +1,9 @@
+---
+
+- include: find-ami.yml
+
+# Only create and use keys when ec2_key_name is not defined
+- include: ssh-key.yml
+  when: ( ec2_key_name is not defined ) 
+
+- include: instances.yml

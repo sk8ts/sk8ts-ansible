@@ -1,0 +1,76 @@
+---
+
+ami_name: "ubuntu/images/ubuntu-xenial-16.04-amd64-server"
+
+default_ssh_key_name: "k8s-ssh-key"
+aws_instance_type: "c3.large"
+
+
+#
+# Don't use spot instances by default
+#
+use_spots: False
+spot_timeout: "300"
+spot_price: "0.03"
+
+k8s_instances:
+  -
+    index: 0
+    krole: "util"
+    public_ip: True
+    source_dest_check: True
+    iam_role: "{{ iam_master_role }}"
+  -
+    index: 0
+    krole: "controller"
+    public_ip: False
+    source_dest_check: True
+    iam_role: "{{ iam_master_role }}"
+  -
+    index: 1
+    krole: "controller"
+    public_ip: False
+    source_dest_check: True
+    iam_role: "{{ iam_master_role }}"
+  -
+    index: 2
+    krole: "controller"
+    public_ip: False
+    source_dest_check: True
+    iam_role: "{{ iam_master_role }}"
+  -
+    index: 0
+    krole: "etcd"
+    public_ip: False
+    source_dest_check: True
+    iam_role: "{{ iam_worker_role }}"
+  -
+    index: 1
+    krole: "etcd"
+    public_ip: False
+    source_dest_check: True
+    iam_role: "{{ iam_worker_role }}"
+  -
+    index: 2
+    krole: "etcd"
+    public_ip: False
+    source_dest_check: True
+    iam_role: "{{ iam_worker_role }}"
+  -
+    index: 0
+    krole: "worker"
+    public_ip: False
+    source_dest_check: False
+    iam_role: "{{ iam_worker_role }}"
+  -
+    index: 1
+    krole: "worker"
+    public_ip: False
+    source_dest_check: False
+    iam_role: "{{ iam_worker_role }}"
+  -
+    index: 2
+    krole: "worker"
+    public_ip: False
+    source_dest_check: False
+    iam_role: "{{ iam_worker_role }}"

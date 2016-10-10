@@ -1,0 +1,9 @@
+---
+
+- hosts: localhost
+  become: False
+  connection: local
+  roles:
+    - local-ssh-config
+    - local-ssh-agent
+

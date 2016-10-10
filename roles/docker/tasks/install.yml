@@ -1,0 +1,15 @@
+---
+
+- name: copy docker binaries to worker node
+  copy:
+    src: "{{ item }}"
+    dest: "/usr/bin/{{ item | basename }}"
+    mode: "0755"
+  with_fileglob: 
+    - "{{ docker_release_cache_dir }}/docker/*"
+
+- name: install docker.service file
+  template:
+    src: "docker.service"
+    dest: "/etc/systemd/system/"
+  notify: systemctl daemon-reload

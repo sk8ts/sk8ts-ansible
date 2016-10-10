@@ -1,0 +1,30 @@
+---
+
+- name: create iam roles
+  iam:
+    iam_type: role
+    region: "{{ aws_region }}"
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ iam_master_role }}"
+    - "{{ iam_worker_role }}"
+
+# FIXME: https://github.com/ansible/ansible-modules-core/issues/3189
+- name: create master iam role policy
+  iam_policy:
+    region: "{{ aws_region }}"
+    iam_type: role
+    iam_name: "{{ iam_master_role }}"
+    policy_name: "{{ iam_master_policy }}"
+    state: present
+    policy_document: "roles/aws-iam/files/kubernetes-master-policy.json"
+
+- name: create worker iam role policy
+  iam_policy:
+    region: "{{ aws_region }}"
+    iam_type: role
+    iam_name: "{{ iam_worker_role }}"
+    policy_name: "{{ iam_worker_policy }}"
+    state: present
+    policy_document: "roles/aws-iam/files/kubernetes-worker-policy.json"

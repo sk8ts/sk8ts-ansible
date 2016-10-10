@@ -1,0 +1,16 @@
+---
+
+#
+# AWS Infrastructure
+# 
+
+- hosts: localhost
+  connection: local
+  roles:
+    - aws-iam
+    - aws-vpc
+    - aws-instances
+
+- hosts: all
+  gather_facts: False
+

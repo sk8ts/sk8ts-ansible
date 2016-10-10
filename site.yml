@@ -1,0 +1,49 @@
+---
+
+#
+# AWS Infrastructure
+# 
+
+- include: aws-infrastructure.yml
+
+#
+# SSH Configuration
+#
+
+- include: local-ssh-config.yml
+
+#
+# Certificate Authority
+#
+
+- include: certificate-authority.yml
+
+#
+# Create the etcd cluster
+#
+
+- include: etcd-cluster.yml
+
+#
+# Setup the k8s controller nodes
+#
+      
+- include: k8s-controller.yml
+
+#
+# Create an ELB for the public k8s API 
+#
+
+- include: k8s-public-api.yml
+
+#
+# Setup the worker nodes
+#
+
+- include: k8s-workers.yml
+
+#
+# Setup a kubectl client host
+#
+
+- include: kubectl-client.yml

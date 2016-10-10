@@ -1,0 +1,25 @@
+---
+
+#
+# etcd Cluster
+#
+
+# Now that we have a CA, we can build the etcd cluster
+- hosts: tag_krole_etcd
+  roles:
+    - etcd-cluster
+
+# Start each etcd service one at a time
+- hosts: tag_krole_etcd
+  serial: 1
+  roles:
+    - etcd-bootstrap
+
+# Ensure the cluster is healthy
+- hosts: tag_krole_etcd[0]
+  tasks:
+    - name: verify etcd cluster health
+      shell: etcdctl --ca-file=/etc/etcd/ca.pem cluster-health 
+      changed_when: False
+      failed_when: "'cluster is healthy' not in verify_etcd_cluster.stdout"
+      register: verify_etcd_cluster

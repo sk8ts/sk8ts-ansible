@@ -1,0 +1,7 @@
+---
+
+iam_master_role: "k8s-master-role"
+iam_master_policy: "k8s-master-policy"
+iam_worker_role: "k8s-worker-role"
+iam_worker_policy: "k8s-worker-policy"
+

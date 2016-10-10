@@ -1,0 +1,7 @@
+/NOTES.md
+/rsync.sh
+/venv
+/*.retry
+*.pyc
+*.swp
+/.git.bak

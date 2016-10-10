@@ -1,0 +1,4 @@
+---
+
+# use the c availability zone
+vpc_subnet_az: "{{ aws_region }}c"

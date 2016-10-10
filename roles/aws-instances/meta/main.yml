@@ -1,0 +1,5 @@
+---
+
+dependencies:
+  - { role: aws-iam }
+  - { role: aws-vpc }

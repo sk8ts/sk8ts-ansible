@@ -1,0 +1,5 @@
+---
+
+- name: ensure ssh-agent has default key loaded
+  become: False
+  shell: ssh-add {{ ansible_env.PWD }}/ssh-keys/id_rsa

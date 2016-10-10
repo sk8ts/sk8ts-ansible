@@ -1,0 +1,10 @@
+---
+
+- hosts: tag_krole_controller
+  tasks:
+    - ec2_facts:
+
+- hosts: localhost
+  connection: local
+  roles:
+    - k8s-public-api

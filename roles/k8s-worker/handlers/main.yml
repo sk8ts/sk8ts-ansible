@@ -1,0 +1,10 @@
+---
+
+- name: restart k8s worker services
+  service:
+    name: "{{ item }}"
+    state: "restarted"
+  with_items: "{{ k8s_worker_services }}"
+
+- name: systemctl daemon-reload
+  shell: systemctl daemon-reload

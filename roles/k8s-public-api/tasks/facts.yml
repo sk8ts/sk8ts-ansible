@@ -1,0 +1,23 @@
+---
+
+#- ec2_facts:
+
+# VPC facts will come from the aws-vpc role which is a dependency
+
+- set_fact:
+    controller_instance_ids: "[]"
+
+- debug:
+    msg: "{{ hostvars[item].ansible_ec2_instance_id }}"
+    verbosity: 2
+  with_items: "{{ groups.tag_krole_controller }}"
+
+# Build the controller_instance_ids list
+- set_fact:
+    controller_instance_ids: "{{ controller_instance_ids }} + [ '{{ hostvars[item].ansible_ec2_instance_id }}' ]"
+  with_items: "{{ groups.tag_krole_controller }}"
+
+- debug:
+    var: controller_instance_ids
+    verbosity: 2
+

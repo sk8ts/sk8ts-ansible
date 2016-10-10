@@ -1,0 +1,7 @@
+---
+
+- name: setup an ssh_config file
+  template:
+    src: "ssh_config"
+    dest: "{{ ansible_env.PWD }}"
+

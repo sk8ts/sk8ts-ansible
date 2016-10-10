@@ -1,0 +1,65 @@
+---
+
+- name: ensure cfssl working directory exists
+  file:
+    path: "{{ cfssl_dir }}"
+    state: "directory"
+
+- name: install cfssl binaries
+  get_url:
+    url: "{{ item.url }}"
+    dest: "/usr/local/bin/{{ item.name }}"
+    mode: 0755
+    checksum: "sha256:{{ item.sha256 }}"
+  with_items: "{{ cfssl_binaries }}"
+
+- name: install cfssl configuration files 
+  copy:
+    src: "{{ item }}"
+    dest: "{{ cfssl_dir }}/{{ item }}"
+  with_items:
+    - ca-config.json
+    - ca-csr.json 
+
+- name: generate the CA certificate and private key
+  shell: cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+  args:
+    chdir: "{{ cfssl_dir }}" 
+    creates: "ca.pem"
+
+- name: verify CA certificate
+  shell: openssl x509 -in ca.pem -text -noout
+  args:
+    chdir: "{{ cfssl_dir }}"
+  changed_when: False
+
+- name: install kubernetes-csr.json from template
+  template:
+    src: "kubernetes-csr.json"
+    dest: "{{ cfssl_dir }}/kubernetes-csr.json"
+  tags:
+    - csr
+ 
+- name: generate the Kubernetes certificate and private key
+  shell: cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kubernetes-csr.json | cfssljson -bare kubernetes 
+  args:
+    chdir: "{{ cfssl_dir }}"
+    creates: "kubernetes.pem"
+
+- name: verify kubernetes.pem
+  shell: openssl x509 -in kubernetes.pem -text -noout
+  args:
+    chdir: "{{ cfssl_dir }}"
+  changed_when: False
+
+- name: fetch required certificates
+  fetch:
+    flat: True
+    dest: "fetched/"
+    src: "{{ cfssl_dir }}/{{ item }}"
+  with_items:
+    - ca.pem 
+    - kubernetes-key.pem 
+    - kubernetes.pem
+  tags:
+    - fetch

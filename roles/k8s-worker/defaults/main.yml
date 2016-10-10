@@ -1,0 +1,11 @@
+---
+
+k8s_worker_services:
+  - kubelet
+  - kube-proxy
+
+k8s_worker_binaries:
+  - kube-proxy
+  - kubelet
+
+cni_release_cache_dir: "/var/cache/cni-release"

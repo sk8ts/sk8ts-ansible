@@ -1,0 +1,35 @@
+---
+
+- debug:
+    var: vpc_network_id
+
+#
+# NOTE: Setting the route able was failing when the vpc was already
+# created. So for now if it already exists, ie. the vpc_network_id 
+# is set by the facts-vpc.yml file which is included next. It's a
+# bit of a hack.
+#
+
+- name: create an AWS VPC for use with kubernetes
+  ec2_vpc:
+    state: present
+    region: "{{ aws_region }}"
+    cidr_block: "{{ vpc_network_cidr }}"
+    resource_tags: { "Name": "kubernetes", "KubernetesCluster": "{{ k8s_cluster_name }}" }
+    internet_gateway: True
+    wait: True
+    subnets:
+      - cidr: "{{ vpc_public_subnet_cidr }}" 
+        az: "{{ vpc_subnet_az }}"
+        resource_tags: { "Name" : "{{ vpc_public_subnet_name }}", "KubernetesCluster": "{{ k8s_cluster_name }}" }
+      - cidr: "{{ vpc_private_subnet_cidr }}" 
+        az: "{{ vpc_subnet_az }}"
+        resource_tags: { "Name" : "{{ vpc_private_subnet_name }}", "KubernetesCluster": "{{ k8s_cluster_name }}" }
+    # NOTE: This was failing with an existing vpc. Perhaps add to route-table section?
+    route_tables:
+      - subnets:
+          - "{{ vpc_public_subnet_cidr }}" 
+        routes:
+          - dest: 0.0.0.0/0
+            gw: igw 
+  when: vpc_network_id is not defined

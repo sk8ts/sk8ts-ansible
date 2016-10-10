@@ -1,0 +1,19 @@
+---
+
+- name: download and install k8s worker binaries
+  copy:
+    src: "{{ k8s_release_cache_dir }}/kubernetes/server/bin/{{ item }}"
+    dest: "/usr/bin/"
+    mode: "0755"
+  with_items: "{{ k8s_worker_binaries }}"
+
+- name: ensure /var/lib/kubelet exists
+  file:
+    path: "/var/lib/kubelet"
+    state: "directory"
+
+- name: install the kubelet and kube-proxy service files
+  template:
+    src: "{{ item }}.service"
+    dest: "/etc/systemd/system/{{ item }}.service"
+  with_items: "{{ k8s_worker_services }}"

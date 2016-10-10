@@ -1,0 +1,8 @@
+---
+
+- name: install k8s controller binaries from cache 
+  copy:
+    src: "{{ k8s_release_cache_dir }}/kubernetes/server/bin/{{ item }}"
+    dest: "/usr/bin/"
+    mode: "0755"
+  with_items: "{{ k8s_controller_binaries }}"

@@ -1,0 +1,5 @@
+---
+
+- hosts: tag_krole_util
+  roles:
+    - kubectl-client

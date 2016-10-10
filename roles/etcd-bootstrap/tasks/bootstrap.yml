@@ -1,0 +1,16 @@
+---
+
+# daemon-reload should have happened during install
+- name: ensure etcd is running and enabled
+  service:
+    name: "etcd"
+    state: "running"
+    enabled: True
+
+- name: wait for etcd to be listening on 2380
+  wait_for: 
+    port: 2380
+    host: "{{ ansible_default_ipv4.address }}"
+    delay: 10
+  tags:
+    - systemd
