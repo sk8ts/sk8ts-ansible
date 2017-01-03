@@ -1,15 +1,5 @@
 ---
 
-- name: create iam roles
-  iam:
-    iam_type: role
-    region: "{{ aws_region }}"
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - "{{ iam_master_role }}"
-    - "{{ iam_worker_role }}"
-
 # FIXME: https://github.com/ansible/ansible-modules-core/issues/3189
 - name: create master iam role policy
   iam_policy:

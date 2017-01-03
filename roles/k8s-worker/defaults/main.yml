@@ -9,3 +9,4 @@ k8s_worker_binaries:
   - kubelet
 
 cni_release_cache_dir: "/var/cache/cni-release"
+cni_bin_dir: "/opt/cni/bin"

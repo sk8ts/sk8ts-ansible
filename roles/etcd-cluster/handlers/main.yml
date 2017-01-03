@@ -2,3 +2,8 @@
 
 - name: systemctl daemon-reload
   shell: systemctl daemon-reload
+
+- name: restart etcd
+  service:
+    name: "etcd"
+    state: "restarted"

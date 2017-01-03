@@ -8,3 +8,5 @@
     - ca.pem
     - kubernetes-key.pem 
     - kubernetes.pem
+  notify:
+    - restart etcd

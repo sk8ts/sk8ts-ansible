@@ -2,7 +2,7 @@ ForwardAgent yes
 PubkeyAcceptedKeyTypes=+ssh-dss
 StrictHostKeyChecking no
 UserKnownHostsFile=/dev/null
-IdentityFile {{ k8s_ssh_key }}
+IdentityFile {{ k8s_ssh_id }}
 
 # Note the "ssh -F ssh_config" in the proxy command. Without 
 # that the proxy command will acctually use the regular 

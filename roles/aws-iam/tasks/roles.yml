@@ -1,0 +1,12 @@
+---
+
+- name: create iam roles
+  iam:
+    iam_type: role
+    region: "{{ aws_region }}"
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ iam_master_role }}"
+    - "{{ iam_worker_role }}"
+

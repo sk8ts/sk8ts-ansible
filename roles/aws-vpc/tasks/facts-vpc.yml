@@ -5,14 +5,7 @@
     filters:
       "tag:Name": "{{ vpc_network_name }}"
   register: vpc_network_facts
-
-- debug:
-    var: vpc_network_facts
-    verbosity: 2
-
-#- fail:
-#    msg: "The k8s VPC has probably not been created yet"
-#  when: vpc_network_facts.vpcs[0].id is undefined
+  ignore_errors: True
 
 - set_fact:
     vpc_network_id: "{{ vpc_network_facts.vpcs[0].id }}"

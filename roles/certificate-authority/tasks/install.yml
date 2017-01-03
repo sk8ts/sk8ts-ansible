@@ -1,0 +1,8 @@
+---
+
+- name: install cfssl binaries from release cache
+  copy:
+    src: "{{ cfssl_release_cache_dir }}/{{ item }}"
+    dest: "/usr/bin/{{ item }}"
+    mode: "0755"
+  with_items: "{{ cfssl_binaries }}"

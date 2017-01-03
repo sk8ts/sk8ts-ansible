@@ -1,3 +1,4 @@
 ---
 
+k8s_ssh_id: "/opt/sk8ts/ssh-keys/id_rsa"
 k8s_ssh_key: "/opt/sk8ts/ssh-keys/id_rsa.pub"

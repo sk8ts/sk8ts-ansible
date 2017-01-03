@@ -18,6 +18,8 @@ except:
 inventory = {}
 inventory['_meta'] = { 'hostvars': {} }
 inventory['all'] = []
+# Want everything but localhost used in sk8ts-ansible
+inventory['all_instances'] = []
 
 try:
   instance_identity = utils.get_instance_identity()
@@ -68,6 +70,7 @@ for i in  ec2conn.get_only_instances():
 
       # Only want hosts with a krole, ignore all others
       inventory['all'].append(host_name)
+      inventory['all_instances'].append(host_name)
       inventory['_meta']['hostvars'][host_name] = {}
       inventory['_meta']['hostvars'][host_name]['ansible_ssh_host'] = ip
 

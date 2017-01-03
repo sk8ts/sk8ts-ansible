@@ -1,0 +1,14 @@
+---
+
+- name: ensure cfssl working directory exists
+  file:
+    path: "{{ cfssl_dir }}"
+    state: "directory"
+
+- name: install cfssl configuration files 
+  copy:
+    src: "{{ item }}"
+    dest: "{{ cfssl_dir }}/{{ item }}"
+  with_items:
+    - ca-config.json
+    - ca-csr.json 

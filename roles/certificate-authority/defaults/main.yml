@@ -1,16 +1,10 @@
 ---
 
 cfssl_dir: "/var/lib/cfssl"
-
+cfssl_release_cache_dir: "/var/cache/cfssl-release"
 cfssl_binaries:
-  -
-    url: "https://pkg.cfssl.org/R1.2/cfssl_linux-amd64"
-    name: "cfssl"
-    sha256: "eb34ab2179e0b67c29fd55f52422a94fe751527b06a403a79325fed7cf0145bd"
-  -
-    url: "https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64"
-    name: "cfssljson"
-    sha256: "1c9e628c3b86c3f2f8af56415d474c9ed4c8f9246630bd21c3418dbe5bf6401e"
+  - "cfssl"
+  - "cfssljson"
 
 ca_CN: "kubernetes"
 ca_C: "CA"

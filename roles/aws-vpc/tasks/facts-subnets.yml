@@ -1,5 +1,8 @@
 ---
 
+# Run this again in case the vpc was just created
+- include: facts-vpc.yml
+
 - ec2_vpc_subnet_facts:
     region: "{{ aws_region }}"
     filters:

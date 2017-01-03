@@ -1,0 +1,17 @@
+---
+
+- name: gather ec2_elb_facts
+  ec2_elb_facts:
+    region: "{{ aws_region }}"
+    names:
+      - "{{ k8s_api_lb_name }}"
+  register: elb_facts 
+  delegate_to: "localhost"
+
+- set_fact:
+    k8s_api_lb: "{{ elb_facts['elbs'][0] }}" 
+
+- debug:
+    verbosity: 2
+    var: k8s_api_lb
+

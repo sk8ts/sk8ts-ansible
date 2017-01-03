@@ -1,0 +1,25 @@
+---
+
+# b/c we are just untarring the etcd release we don't
+# really know the name of the directory that the etcd
+# binaries are stored in on the sk8ts instance. Using
+# a couple of wildcards used to work in ansibke < 
+# 2.2.0 but now no longer does.
+
+- name: find the name of the etcd directory containing etcd binaries
+  find:
+    paths: "{{ etcd_release_cache_dir }}"
+    file_type: "directory"
+  register: etcd_binaries_directories
+  delegate_to: localhost
+  run_once: True
+
+- debug:
+    var: etcd_binaries_directories
+
+# Just use the first directory
+- set_fact:
+    etcd_binary_directory: "{{ etcd_binaries_directories.files[0].path }}"
+
+- debug:
+    var: etcd_binary_directory

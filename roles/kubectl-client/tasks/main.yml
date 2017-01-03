@@ -1,30 +1,5 @@
 ---
 
-- name: gather ec2_elb_facts
-  ec2_elb_facts:
-    region: "{{ aws_region }}"
-    names:
-      - "{{ k8s_api_lb_name }}"
-  register: elb_facts 
-  delegate_to: "localhost"
-
-- set_fact:
-    k8s_api_lb: "{{ elb_facts['elbs'][0] }}" 
-
-- debug:
-    verbosity: 2
-    var: k8s_api_lb
-
-- name: ensure ubuntu user has a .kube directory
-  file:
-    path: "/home/ubuntu/.kube"
-    state: "directory"
-    owner: "ubuntu"
-    group: "ubuntu"
-
-- name: install ubuntu users kubectl config file from template
-  template:
-    src: "kubectl-config"
-    dest: "/home/ubuntu/.kube/config"
-    owner: "ubuntu"
-    group: "ubuntu"
+- include: facts-elb.yml
+- include: install.yml
+- include: tests.yml

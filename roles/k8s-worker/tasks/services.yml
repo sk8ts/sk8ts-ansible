@@ -1,6 +1,6 @@
 ---
 
-- name: install the kubelet and kub-proxy service files
+- name: install the kubelet and kube-proxy service files
   template:
     src: "{{ item }}"
     dest: "/etc/systemd/system/{{ item }}"

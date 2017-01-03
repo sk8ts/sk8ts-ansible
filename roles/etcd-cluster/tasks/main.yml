@@ -1,5 +1,6 @@
 ---
 
+- include: find-etcd-directory.yml
 - include: install.yml
 - include: config.yml
 #- include: service.yml

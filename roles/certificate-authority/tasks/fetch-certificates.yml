@@ -1,0 +1,13 @@
+---
+
+- name: fetch required certificates
+  fetch:
+    flat: True
+    dest: "fetched/"
+    src: "{{ cfssl_dir }}/{{ item }}"
+  with_items:
+    - ca.pem 
+    - kubernetes-key.pem 
+    - kubernetes.pem
+  tags:
+    - fetch

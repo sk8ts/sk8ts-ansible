@@ -1,0 +1,7 @@
+---
+
+- name: use kubtctl client to get cluster-info
+  command: kubectl cluster-info
+  changed_when: False
+  # Run as ubuntu user which has a kubectl config
+  become: False

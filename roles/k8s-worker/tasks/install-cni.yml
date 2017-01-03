@@ -2,13 +2,13 @@
 
 - name: ensure /opt/cni exists
   file:
-    path: "/opt/cni"
+    path: "{{ cni_bin_dir }}"
     state: "directory"
 
 - name: copy cni binaries 
   copy:
     src: "{{ item }}"
-    dest: "/opt/cni/{{ item | basename }}"
+    dest: "{{ cni_bin_dir }}/{{ item | basename }}"
     mode: "0755"
   with_fileglob:
     - "{{ cni_release_cache_dir }}/bin/*"
